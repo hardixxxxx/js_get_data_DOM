@@ -1,25 +1,16 @@
 'use strict';
 
-const populations = document.querySelectorAll('.population');
-const totalPopulation = document.querySelector('.total-population');
-const averagePopulation = document.querySelector('.average-population');
+const populations = [...document.querySelectorAll('.population')];
+const totalPopulationElem = document.querySelector('.total-population');
+const avaragePopulationElem = document.querySelector('.average-population');
 
-const tPopulation = calcPopulation(populations);
-const aPopulation = calcPopulation(populations, populations.length);
+const totalPopulation = populations.reduce((sum, population) => {
+  const clearStr = population.textContent.replaceAll(',', '');
 
-totalPopulation.innerHTML = tPopulation.toLocaleString('en-US');
-averagePopulation.innerHTML = aPopulation.toLocaleString('en-US');
+  return +clearStr + sum;
+}, 0);
 
-function calcPopulation(population, average) {
-  const total = [...population].reduce((sum, p) => {
-    const n = +p.innerHTML.replaceAll(',', '');
+const avaragePopulation = totalPopulation / populations.length;
 
-    return n + sum;
-  }, 0);
-
-  if (average) {
-    return Math.round(total / average);
-  }
-
-  return total;
-}
+totalPopulationElem.textContent = totalPopulation.toLocaleString('en-US');
+avaragePopulationElem.textContent = avaragePopulation.toLocaleString('en-US');
